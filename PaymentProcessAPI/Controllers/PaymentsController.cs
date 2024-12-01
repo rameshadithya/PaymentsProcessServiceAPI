@@ -37,6 +37,11 @@ namespace PaymentProcessAPI.Controllers
 
             try
             {
+                var user = await _context.paymentDetails.FirstOrDefaultAsync(x => x.ID == paymentDetail.ID);
+                if (user == null)
+                {
+                    return BadRequest("Invalid User.");
+                }
                 var paymentMethod = _paymentProvider.GetPayment(paymentDetail.PaymentType);
                 var response = await paymentMethod.ProcessPayment(paymentDetail);
                 return Ok(response);
